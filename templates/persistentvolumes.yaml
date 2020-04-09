@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: xnat-web-volume0
+  labels:
+    name: xnat-web-volume0
+    type: local
+spec:
+  capacity:
+    storage: {{ .Values.XnatWeb.plugins.storage }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.XnatWeb.plugins.hostPath }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: xnat-web-volume1
+  labels:
+    name: xnat-web-volume1
+    type: local
+spec:
+  capacity:
+    storage: {{ .Values.XnatWeb.logs.storage }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.XnatWeb.logs.hostPath }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: xnat-web-volume2
+  labels:
+    name: xnat-web-volume2
+    type: local
+spec:
+  capacity:
+    storage: {{ .Values.XnatWeb.archive.storage }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.XnatWeb.archive.hostPath }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: xnat-web-volume3
+  labels:
+    name: xnat-web-volume3
+    type: local
+spec:
+  capacity:
+    storage: {{ .Values.XnatWeb.build.storage }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.XnatWeb.build.hostPath }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: xnat-web-volume4
+  labels:
+    name: xnat-web-volume4
+    type: local
+spec:
+  capacity:
+    storage: {{ .Values.XnatWeb.dockerSock.storage }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.XnatWeb.dockerSock.hostPath }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: xnat-db-volume
+  labels:
+    name: xnat-db-volume
+    type: local
+spec:
+  capacity:
+    storage: {{ .Values.XnatDb.storage }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.XnatDb.hostPath }}

@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ .Values.XnatWeb.name }}
+  name: {{ .Values.XnatWeb.name }}
+spec:
+  type: {{ .Values.XnatWeb.type }}
+  ports:
+  - name: web1
+    port: {{ .Values.XnatWeb.ports.web8081 }}
+    targetPort: {{ .Values.XnatWeb.ports.web8080 }}
+    nodePort: {{ .Values.XnatWeb.ports.nodePort }}
+  - name: web0
+    port: {{ .Values.XnatWeb.ports.web8000 }}
+    targetPort: {{ .Values.XnatWeb.ports.web8000 }}
+  - name: web2
+    port: {{ .Values.XnatWeb.ports.ssh22 }}
+    targetPort: {{ .Values.XnatWeb.ports.ssh22 }}
+  selector:
+    app.kubernetes.io/name: {{ .Values.XnatWeb.name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ .Values.XnatDb.name }}
+  name: {{ .Values.XnatDb.name }}
+spec:
+  ports:
+  - name: {{ .Values.XnatDb.name }}
+    port: {{ .Values.XnatDb.ports }}
+    targetPort: {{ .Values.XnatDb.ports }}
+  selector:
+    app.kubernetes.io/name: {{ .Values.XnatDb.name }}
