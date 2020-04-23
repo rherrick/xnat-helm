@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: xnat-web-volume0
+  name: {{ .Values.XnatWeb.name }}-volume0
   labels:
-    name: xnat-web-volume0
+    name: {{ .Values.XnatWeb.name }}-volume0
     type: local
 spec:
   capacity:
@@ -16,9 +16,9 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: xnat-web-volume1
+  name: {{ .Values.XnatWeb.name }}-volume1
   labels:
-    name: xnat-web-volume1
+    name: {{ .Values.XnatWeb.name }}-volume1
     type: local
 spec:
   capacity:
@@ -31,9 +31,9 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: xnat-web-volume2
+  name: {{ .Values.XnatWeb.name }}-volume2
   labels:
-    name: xnat-web-volume2
+    name: {{ .Values.XnatWeb.name }}-volume2
     type: local
 spec:
   capacity:
@@ -46,9 +46,9 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: xnat-web-volume3
+  name: {{ .Values.XnatWeb.name }}-volume3
   labels:
-    name: xnat-web-volume3
+    name: {{ .Values.XnatWeb.name }}-volume3
     type: local
 spec:
   capacity:
@@ -61,9 +61,9 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: xnat-web-volume4
+  name: {{ .Values.XnatWeb.name }}-volume4
   labels:
-    name: xnat-web-volume4
+    name: {{ .Values.XnatWeb.name }}-volume4
     type: local
 spec:
   capacity:
@@ -76,9 +76,9 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: xnat-db-volume
+  name: {{ .Values.XnatDb.name }}-volume
   labels:
-    name: xnat-db-volume
+    name: {{ .Values.XnatDb.name }}-volume
     type: local
 spec:
   capacity:

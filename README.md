@@ -59,6 +59,12 @@ $ kubectl logs pod/xnat-web-84854f6787-vrtlp
 
 Once XNAT has completed start-up, you can access it via [http://localhost:30001](http://localhost:30001).
 
+You can stop your deployment by uninstalling the Helm chart:
+
+```bash
+$ helm uninstall xnat
+```
+
 ### External Kubernetes cluster ###
 
 _TBD_

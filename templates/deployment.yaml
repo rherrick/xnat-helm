@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xnat-web
+  name: {{ .Values.XnatWeb.name }}
 spec:
   replicas: 1
   selector:
@@ -53,15 +53,15 @@ spec:
         terminationMessagePolicy: File
         volumeMounts:
         - mountPath: {{ .Values.XnatWeb.plugins.volumes }}
-          name: xnat-web-claim0
+          name: {{ .Values.XnatWeb.name }}-claim0
         - mountPath: {{ .Values.XnatWeb.logs.volumes }}
-          name: xnat-web-claim1
+          name: {{ .Values.XnatWeb.name }}-claim1
         - mountPath: {{ .Values.XnatWeb.archive.volumes }}
-          name: xnat-web-claim2
+          name: {{ .Values.XnatWeb.name }}-claim2
         - mountPath: {{ .Values.XnatWeb.build.volumes }}
-          name: xnat-web-claim3
+          name: {{ .Values.XnatWeb.name }}-claim3
         - mountPath: {{ .Values.XnatWeb.dockerSock.volumes }}
-          name: xnat-web-claim4
+          name: {{ .Values.XnatWeb.name }}-claim4
         - mountPath: {{ .Values.XnatWeb.config.volumes }}/{{ .Values.XnatWeb.config.xnat_config }}
           subPath: {{ .Values.XnatWeb.config.xnat_config }}
           name: {{ .Values.XnatWeb.config.xnat_config_name }}
@@ -82,21 +82,21 @@ spec:
         configMap: 
           name: {{ .Values.XnatWeb.config.postgres_name }}
           defaultMode: 0777
-      - name: xnat-web-claim0
+      - name: {{ .Values.XnatWeb.name }}-claim0
         persistentVolumeClaim:
-          claimName: xnat-web-claim0
-      - name: xnat-web-claim1
+          claimName: {{ .Values.XnatWeb.name }}-claim0
+      - name: {{ .Values.XnatWeb.name }}-claim1
         persistentVolumeClaim:
-          claimName: xnat-web-claim1
-      - name: xnat-web-claim2
+          claimName: {{ .Values.XnatWeb.name }}-claim1
+      - name: {{ .Values.XnatWeb.name }}-claim2
         persistentVolumeClaim:
-          claimName: xnat-web-claim2
-      - name: xnat-web-claim3
+          claimName: {{ .Values.XnatWeb.name }}-claim2
+      - name: {{ .Values.XnatWeb.name }}-claim3
         persistentVolumeClaim:
-          claimName: xnat-web-claim3
-      - name: xnat-web-claim4
+          claimName: {{ .Values.XnatWeb.name }}-claim3
+      - name: {{ .Values.XnatWeb.name }}-claim4
         persistentVolumeClaim:
-          claimName: xnat-web-claim4
+          claimName: {{ .Values.XnatWeb.name }}-claim4
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -117,7 +117,7 @@ spec:
       containers:
       - env:
         - name: POSTGRES_HOST_AUTH_METHOD
-          value: trust
+          value: {{ .Values.XnatDb.auth_method }}
         image: {{ .Values.XnatDb.image }}
         imagePullPolicy: Always
         name: {{ .Values.XnatDb.name }}
@@ -129,7 +129,7 @@ spec:
         terminationMessagePolicy: File
         volumeMounts:
         - mountPath: {{ .Values.XnatDb.volumes.data }}
-          name: xnat-db-claim0
+          name: {{ .Values.XnatDb.name }}-claim0
         - mountPath: {{ .Values.XnatDb.volumes.sqlinit }}/{{ .Values.XnatDb.volumes.name }}
           subPath: {{ .Values.XnatDb.volumes.name }}
           name: {{ .Values.XnatDb.name }}
@@ -142,6 +142,6 @@ spec:
       - name: {{ .Values.XnatDb.name }}
         configMap:
           name: {{ .Values.XnatDb.name }}
-      - name: xnat-db-claim0
+      - name: {{ .Values.XnatDb.name }}-claim0
         persistentVolumeClaim:
-          claimName: xnat-db-claim0
+          claimName: {{ .Values.XnatDb.name }}-claim0

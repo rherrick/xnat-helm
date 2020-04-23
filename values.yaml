@@ -1,7 +1,7 @@
 XnatDb:
   name: xnat-db
   auth_method: trust
-  image: postgres:9.4-alpine
+  image: postgres:11.7-alpine
   storage: 10Gi
   Request: 5Gi
   hostPath: /home/nvidia/postgres
@@ -28,6 +28,8 @@ XnatWeb:
   args: "make-xnat-config.sh && wait-for-postgres.sh /usr/local/tomcat/bin/catalina.sh run"
   config:
     volumes: /usr/local/bin
+    xnat_war: xnat-web-${XNAT_VER}.war
+    xnat_download_url: https://api.bitbucket.org/2.0/repositories/xnatdev/xnat-web/downloads
     xnat_config: make-xnat-config.sh
     xnat_config_name: xnat-config
     postgres: wait-for-postgres.sh

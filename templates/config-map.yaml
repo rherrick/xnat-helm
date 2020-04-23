@@ -35,10 +35,10 @@ data:
     fi
 
     cd ${CATALINA_HOME}/webapps/
-    wget https://api.bitbucket.org/2.0/repositories/xnatdev/xnat-web/downloads/xnat-web-${XNAT_VER}.war
+    wget {{ .Values.XnatWeb.config.xnat_download_url }}/{{ .Values.XnatWeb.config.xnat_war }}
     cd ${TOMCAT_XNAT_FOLDER}
-    unzip -o ../xnat-web-${XNAT_VER}.war
-    rm -f ../xnat-web-${XNAT_VER}.war
+    unzip -o ../{{ .Values.XnatWeb.config.xnat_war }}
+    rm -f ../{{ .Values.XnatWeb.config.xnat_war }}
     apk del wget
 ---
 apiVersion: v1
@@ -54,7 +54,7 @@ data:
 
     cmd="$@"
 
-    until psql -U "$XNAT_DATASOURCE_USERNAME" -h xnat-db -c '\q'; do
+    until psql -U "$XNAT_DATASOURCE_USERNAME" -h {{ .Values.XnatDb.name }} -c '\q'; do
       >&2 echo "Postgres is unavailable - sleeping"
       sleep 5
     done
@@ -68,6 +68,6 @@ metadata:
   name: {{ .Values.XnatDb.name }}
 data:
   XNAT.sql: |-
-    CREATE USER xnat  NOCREATEDB;
-    CREATE DATABASE xnat OWNER xnat;
-    ALTER USER xnat WITH PASSWORD 'xnat';
+    CREATE USER {{ .Values.XnatWeb.Env.XNAT_DATASOURCE_USERNAME }} NOCREATEDB;
+    CREATE DATABASE {{ .Values.XnatWeb.Env.XNAT_DATASOURCE_USERNAME }} OWNER {{ .Values.XnatWeb.Env.XNAT_DATASOURCE_USERNAME }};
+    ALTER USER {{ .Values.XnatWeb.Env.XNAT_DATASOURCE_USERNAME }} WITH PASSWORD '{{ .Values.XnatWeb.Env.XNAT_DATASOURCE_PASSWORD }}';

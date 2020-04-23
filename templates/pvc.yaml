@@ -3,8 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: xnat-web-claim0
-  name: xnat-web-claim0
+    io.kompose.service: {{ .Values.XnatWeb.name }}-claim0
+  name: {{ .Values.XnatWeb.name }}-claim0
 spec:
   accessModes:
   - ReadWriteOnce
@@ -13,7 +13,7 @@ spec:
       storage: {{ .Values.XnatWeb.plugins.Request }}
   selector:
     matchLabels:
-      name: xnat-web-volume0
+      name: {{ .Values.XnatWeb.name }}-volume0
 status: {}
 ---
 apiVersion: v1
@@ -21,8 +21,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: xnat-web-claim1
-  name: xnat-web-claim1
+    io.kompose.service: {{ .Values.XnatWeb.name }}-claim1
+  name: {{ .Values.XnatWeb.name }}-claim1
 spec:
   accessModes:
   - ReadWriteOnce
@@ -31,7 +31,7 @@ spec:
       storage: {{ .Values.XnatWeb.logs.Request }}
   selector:
     matchLabels:
-      name: xnat-web-volume1
+      name: {{ .Values.XnatWeb.name }}-volume1
 status: {}
 ---
 apiVersion: v1
@@ -39,8 +39,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: xnat-web-claim2
-  name: xnat-web-claim2
+    io.kompose.service: {{ .Values.XnatWeb.name }}-claim2
+  name: {{ .Values.XnatWeb.name }}-claim2
 spec:
   accessModes:
   - ReadWriteOnce
@@ -49,7 +49,7 @@ spec:
       storage: {{ .Values.XnatWeb.archive.Request }}
   selector:
     matchLabels:
-      name: xnat-web-volume2
+      name: {{ .Values.XnatWeb.name }}-volume2
 status: {}
 ---
 apiVersion: v1
@@ -57,8 +57,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: xnat-web-claim3
-  name: xnat-web-claim3
+    io.kompose.service: {{ .Values.XnatWeb.name }}-claim3
+  name: {{ .Values.XnatWeb.name }}-claim3
 spec:
   accessModes:
   - ReadWriteOnce
@@ -67,7 +67,7 @@ spec:
       storage: {{ .Values.XnatWeb.build.Request }}
   selector:
     matchLabels:
-      name: xnat-web-volume3
+      name: {{ .Values.XnatWeb.name }}-volume3
 status: {}
 ---
 apiVersion: v1
@@ -75,8 +75,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: xnat-web-claim4
-  name: xnat-web-claim4
+    io.kompose.service: {{ .Values.XnatWeb.name }}-claim4
+  name: {{ .Values.XnatWeb.name }}-claim4
 spec:
   accessModes:
   - ReadWriteOnce
@@ -85,7 +85,7 @@ spec:
       storage: {{ .Values.XnatWeb.dockerSock.Request }}
   selector:
     matchLabels:
-      name: xnat-web-volume4
+      name: {{ .Values.XnatWeb.name }}-volume4
 status: {}
 ---
 apiVersion: v1
@@ -93,8 +93,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: xnat-db-claim0
-  name: xnat-db-claim0
+    io.kompose.service: {{ .Values.XnatDb.name }}-claim0
+  name: {{ .Values.XnatDb.name }}-claim0
 spec:
   accessModes:
   - ReadWriteOnce
@@ -103,4 +103,4 @@ spec:
       storage: {{ .Values.XnatDb.Request }}
   selector:
     matchLabels:
-      name: xnat-db-volume
+      name: {{ .Values.XnatDb.name }}-volume
