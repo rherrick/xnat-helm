@@ -1,104 +1,104 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Values.XnatWeb.name }}-volume0
+  name: {{ .Values.xnatWeb.name }}-volume0
   labels:
-    name: {{ .Values.XnatWeb.name }}-volume0
+    name: {{ .Values.xnatWeb.name }}-volume0
     type: local
 spec:
   capacity:
-    storage: {{ .Values.XnatWeb.plugins.storage }}
+    storage: {{ .Values.xnatWeb.plugins.storage }}
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: {{ .Values.XnatWeb.plugins.hostPath }}
+    path: {{ .Values.xnatWeb.plugins.hostPath }}
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Values.XnatWeb.name }}-volume1
+  name: {{ .Values.xnatWeb.name }}-volume1
   labels:
-    name: {{ .Values.XnatWeb.name }}-volume1
+    name: {{ .Values.xnatWeb.name }}-volume1
     type: local
 spec:
   capacity:
-    storage: {{ .Values.XnatWeb.logs.storage }}
+    storage: {{ .Values.xnatWeb.logs.storage }}
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: {{ .Values.XnatWeb.logs.hostPath }}
+    path: {{ .Values.xnatWeb.logs.hostPath }}
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Values.XnatWeb.name }}-volume2
+  name: {{ .Values.xnatWeb.name }}-volume2
   labels:
-    name: {{ .Values.XnatWeb.name }}-volume2
+    name: {{ .Values.xnatWeb.name }}-volume2
     type: local
 spec:
   capacity:
-    storage: {{ .Values.XnatWeb.archive.storage }}
+    storage: {{ .Values.xnatWeb.archive.storage }}
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: {{ .Values.XnatWeb.archive.hostPath }}
+    path: {{ .Values.xnatWeb.archive.hostPath }}
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Values.XnatWeb.name }}-volume3
+  name: {{ .Values.xnatWeb.name }}-volume3
   labels:
-    name: {{ .Values.XnatWeb.name }}-volume3
+    name: {{ .Values.xnatWeb.name }}-volume3
     type: local
 spec:
   capacity:
-    storage: {{ .Values.XnatWeb.build.storage }}
+    storage: {{ .Values.xnatWeb.build.storage }}
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: {{ .Values.XnatWeb.build.hostPath }}
+    path: {{ .Values.xnatWeb.build.hostPath }}
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Values.XnatWeb.name }}-volume4
+  name: {{ .Values.xnatWeb.name }}-volume4
   labels:
-    name: {{ .Values.XnatWeb.name }}-volume4
+    name: {{ .Values.xnatWeb.name }}-volume4
     type: local
 spec:
   capacity:
-    storage: {{ .Values.XnatWeb.dockerSock.storage }}
+    storage: {{ .Values.xnatWeb.dockerSock.storage }}
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: {{ .Values.XnatWeb.dockerSock.hostPath }}
+    path: {{ .Values.xnatWeb.dockerSock.hostPath }}
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Values.XnatDb.name }}-volume
+  name: {{ .Values.xnatDb.name }}-volume
   labels:
-    name: {{ .Values.XnatDb.name }}-volume
+    name: {{ .Values.xnatDb.name }}-volume
     type: local
 spec:
   capacity:
-    storage: {{ .Values.XnatDb.storage }}
+    storage: {{ .Values.xnatDb.storage }}
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: {{ .Values.XnatDb.hostPath }}
+    path: {{ .Values.xnatDb.hostPath }}
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Values.XnatMq.name }}-volume
+  name: {{ .Values.xnatMq.name }}-volume
   labels:
-    name: {{ .Values.XnatMq.name }}-volume
+    name: {{ .Values.xnatMq.name }}-volume
     type: local
 spec:
   capacity:
-    storage: {{ .Values.XnatMq.storage }}
+    storage: {{ .Values.xnatMq.storage }}
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: {{ .Values.XnatMq.hostPath }}
+    path: {{ .Values.xnatMq.hostPath }}

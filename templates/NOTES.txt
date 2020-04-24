@@ -5,8 +5,8 @@
   http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ . }}
   {{- end }}
 {{- end }}
-{{- else if contains "NodePort" .Values.XnatWeb.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" svc {{ .Values.XnatWeb.name }})
+{{- else if contains "NodePort" .Values.xnatWeb.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" svc {{ .Values.xnatWeb.name }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo http://$NODE_IP:$NODE_PORT
 {{- else if contains "LoadBalancer" .Values.type }}
@@ -14,7 +14,7 @@
            You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "xnat-helm.fullname" . }}'
   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "xnat-helm.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
   echo http://$SERVICE_IP:{{ .Values.ports.web8081 }}
-{{- else if contains "ClusterIP" .Values.service.XnatWeb.type }}
+{{- else if contains "ClusterIP" .Values.service.xnatWeb.type }}
   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "xnat-helm.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl port-forward $POD_NAME 8080:80

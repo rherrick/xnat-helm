@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.XnatWeb.config.xnat_config_name }}
+  name: {{ .Values.xnatWeb.config.xnat.name }}
 data:
   make-xnat-config.sh: |-
     apk add --no-cache postgresql-client wget
@@ -40,26 +40,26 @@ data:
     fi
 
     cd ${CATALINA_HOME}/webapps/
-    wget {{ .Values.XnatWeb.config.xnat_download_url }}/{{ .Values.XnatWeb.config.xnat_war }}
+    wget {{ .Values.xnatWeb.config.warFile.downloadUrl }}/{{ .Values.xnatWeb.config.warFile.name }}
     cd ${TOMCAT_XNAT_FOLDER}
-    unzip -o ../{{ .Values.XnatWeb.config.xnat_war }}
-    rm -f ../{{ .Values.XnatWeb.config.xnat_war }}
+    unzip -o ../{{ .Values.xnatWeb.config.warFile.name }}
+    rm -f ../{{ .Values.xnatWeb.config.warFile.name }}
     apk del wget
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.XnatWeb.config.postgres_name }}
+  name: {{ .Values.xnatWeb.config.postgres.name }}
 data:
-  wait-for-postgres.sh: |-
+  {{ .Values.xnatWeb.config.postgres.script }}: |-
     #!/bin/sh
-    # wait-for-postgres.sh
+    # {{ .Values.xnatWeb.config.postgres.script }}
 
     set -e
 
     cmd="$@"
 
-    until psql -U "${XNAT_DATASOURCE_USERNAME}" -h {{ .Values.XnatDb.name }} -c '\q'; do
+    until psql -U "${XNAT_DATASOURCE_USERNAME}" -h {{ .Values.xnatDb.name }} -c '\q'; do
       >&2 echo "Postgres is unavailable - sleeping"
       sleep 5
     done
@@ -70,9 +70,9 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.XnatDb.name }}
+  name: {{ .Values.xnatDb.name }}
 data:
-  XNAT.sql: |-
-    CREATE USER {{ .Values.XnatWeb.Env.XNAT_DATASOURCE_USERNAME }} NOCREATEDB;
-    CREATE DATABASE {{ .Values.XnatWeb.Env.XNAT_DATASOURCE_USERNAME }} OWNER {{ .Values.XnatWeb.Env.XNAT_DATASOURCE_USERNAME }};
-    ALTER USER {{ .Values.XnatWeb.Env.XNAT_DATASOURCE_USERNAME }} WITH PASSWORD '{{ .Values.XnatWeb.Env.XNAT_DATASOURCE_PASSWORD }}';
+  {{ .Values.xnatDb.init.script }}: |-
+    CREATE USER {{ .Values.xnatWeb.env.dataSource.username }} NOCREATEDB;
+    CREATE DATABASE {{ .Values.xnatWeb.env.dataSource.username }} OWNER {{ .Values.xnatWeb.env.dataSource.username }};
+    ALTER USER {{ .Values.xnatWeb.env.dataSource.username }} WITH PASSWORD '{{ .Values.xnatWeb.env.dataSource.password }}';

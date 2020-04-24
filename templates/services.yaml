@@ -2,51 +2,51 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/name: {{ .Values.XnatWeb.name }}
-  name: {{ .Values.XnatWeb.name }}
+    app.kubernetes.io/name: {{ .Values.xnatWeb.name }}
+  name: {{ .Values.xnatWeb.name }}
 spec:
-  type: {{ .Values.XnatWeb.type }}
+  type: {{ .Values.xnatWeb.type }}
   ports:
   - name: web1
-    port: {{ .Values.XnatWeb.ports.web8081 }}
-    targetPort: {{ .Values.XnatWeb.ports.web8080 }}
-    nodePort: {{ .Values.XnatWeb.ports.nodePort }}
+    port: {{ .Values.xnatWeb.ports.web8081 }}
+    targetPort: {{ .Values.xnatWeb.ports.web8080 }}
+    nodePort: {{ .Values.xnatWeb.ports.nodePort }}
   - name: web0
-    port: {{ .Values.XnatWeb.ports.web8000 }}
-    targetPort: {{ .Values.XnatWeb.ports.web8000 }}
+    port: {{ .Values.xnatWeb.ports.web8000 }}
+    targetPort: {{ .Values.xnatWeb.ports.web8000 }}
   - name: web2
-    port: {{ .Values.XnatWeb.ports.ssh22 }}
-    targetPort: {{ .Values.XnatWeb.ports.ssh22 }}
+    port: {{ .Values.xnatWeb.ports.ssh22 }}
+    targetPort: {{ .Values.xnatWeb.ports.ssh22 }}
   selector:
-    app.kubernetes.io/name: {{ .Values.XnatWeb.name }}
+    app.kubernetes.io/name: {{ .Values.xnatWeb.name }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/name: {{ .Values.XnatDb.name }}
-  name: {{ .Values.XnatDb.name }}
+    app.kubernetes.io/name: {{ .Values.xnatDb.name }}
+  name: {{ .Values.xnatDb.name }}
 spec:
   ports:
-  - name: {{ .Values.XnatDb.name }}
-    port: {{ .Values.XnatDb.ports }}
-    targetPort: {{ .Values.XnatDb.ports }}
+  - name: {{ .Values.xnatDb.name }}
+    port: {{ .Values.xnatDb.ports }}
+    targetPort: {{ .Values.xnatDb.ports }}
   selector:
-    app.kubernetes.io/name: {{ .Values.XnatDb.name }}
+    app.kubernetes.io/name: {{ .Values.xnatDb.name }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/name: {{ .Values.XnatMq.name }}
-  name: {{ .Values.XnatMq.name }}
+    app.kubernetes.io/name: {{ .Values.xnatMq.name }}
+  name: {{ .Values.xnatMq.name }}
 spec:
   ports:
-  - name: {{ .Values.XnatMq.name }}-admin
-    port: {{ .Values.XnatMq.ports.adminUi }}
-    targetPort: {{ .Values.XnatMq.ports.adminUi }}
-  - name: {{ .Values.XnatMq.name }}
-    port: {{ .Values.XnatMq.ports.mq }}
-    targetPort: {{ .Values.XnatMq.ports.mq }}
+  - name: {{ .Values.xnatMq.name }}-admin
+    port: {{ .Values.xnatMq.ports.adminUi }}
+    targetPort: {{ .Values.xnatMq.ports.adminUi }}
+  - name: {{ .Values.xnatMq.name }}
+    port: {{ .Values.xnatMq.ports.mq }}
+    targetPort: {{ .Values.xnatMq.ports.mq }}
   selector:
-    app.kubernetes.io/name: {{ .Values.XnatMq.name }}
+    app.kubernetes.io/name: {{ .Values.xnatMq.name }}

@@ -1,66 +1,74 @@
-XnatDb:
+xnatDb:
   name: xnat-db
-  auth_method: trust
+  authMethod: trust
   image: postgres:11.7-alpine
   storage: 10Gi
-  Request: 5Gi
+  request: 5Gi
   hostPath: /home/nvidia/postgres
   ports: 5432
+  init:
+    path: /docker-entrypoint-initdb.d
+    script: xnat.sql
   volumes:
     data: /var/lib/postgresql/data
-    sqlinit: /docker-entrypoint-initdb.d
-    name: XNAT.sql
 
-XnatWeb:
+xnatWeb:
   name: xnat-web
-  Env:
-    XNAT_VER: '1.7.6'
-    CatalinaOpts: -Xms128m -Xmx2048m -Dxnat.home=/data/xnat/home -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
-    XNAT_HOME: /data/xnat/home
-    XNAT_ROOT: /data/xnat
-    XNAT_DATASOURCE_DRIVER: org.postgresql.Driver
-    XNAT_DATASOURCE_URL: jdbc:postgresql://xnat-db/xnat
-    XNAT_DATASOURCE_USERNAME: xnat
-    XNAT_DATASOURCE_PASSWORD: xnat
-    XNAT_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQL9Dialect
-    TOMCAT_XNAT_FOLDER: ROOT
-    ACTIVEMQ_BROKER_URL: tcp://xnat-mq:61616
-    ACTIVEMQ_USER: write
-    ACTIVEMQ_PASSWORD: password
-    MAX_FILE_SIZE: 1073741824
-    MAX_REQUEST_SIZE: 2147483648
+  env:
+    version: '1.7.6'
+    catalinaOpts: -Xms128m -Xmx2048m -Dxnat.home=/data/xnat/home -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
+    folders:
+      home: /data/xnat/home
+      root: /data/xnat
+      tomcat: ROOT
+    dataSource:
+      driver: org.postgresql.Driver
+      url: jdbc:postgresql://xnat-db/xnat
+      username: xnat
+      password: xnat
+      dialect: org.hibernate.dialect.PostgreSQL9Dialect
+    mq:
+      brokerUrl: tcp://xnat-mq:61616
+      username: write
+      password: password
+    multipart:
+      maxFileSize: 1073741824
+      maxRequestSize: 2147483648
   image: tomcat:7-jre8-alpine
   args: "make-xnat-config.sh && wait-for-postgres.sh /usr/local/tomcat/bin/catalina.sh run"
   config:
-    volumes: /usr/local/bin
-    xnat_war: xnat-web-${XNAT_VER}.war
-    xnat_download_url: https://api.bitbucket.org/2.0/repositories/xnatdev/xnat-web/downloads
-    xnat_config: make-xnat-config.sh
-    xnat_config_name: xnat-config
-    postgres: wait-for-postgres.sh
-    postgres_name: postgres
+    bin: /usr/local/bin
+    warFile:
+      name: xnat-web-${XNAT_VER}.war
+      downloadUrl: https://api.bitbucket.org/2.0/repositories/xnatdev/xnat-web/downloads
+    xnat:
+      name: xnat-config
+      script: make-xnat-config.sh
+    postgres:
+      name: postgres
+      script: wait-for-postgres.sh
   archive:
-    Request: 5Gi
+    request: 5Gi
     hostPath: /home/nvidia/xnat-docker-compose/xnat-data/archive
     storage: 10Gi
     volumes: /data/xnat/archive
   build:
-    Request: 5Gi
+    request: 5Gi
     hostPath: /home/nvidia/xnat-docker-compose/xnat-data/build
     storage: 10Gi
     volumes: /data/xnat/build
   dockerSock:
-    Request: 5Gi
+    request: 5Gi
     hostPath: /var/run/docker.sock
     storage: 10Gi
     volumes: /var/run/docker.sock
   logs:
-    Request: 5Gi
+    request: 5Gi
     hostPath: /home/nvidia/xnat-docker-compose/xnat-data/home/logs
     storage: 10Gi
     volumes: /data/xnat/home/logs
   plugins:
-    Request: 5Gi
+    request: 5Gi
     hostPath: /home/nvidia/xnat-docker-compose/xnat/plugins
     storage: 10Gi
     volumes: /data/xnat/home/plugins
@@ -72,29 +80,35 @@ XnatWeb:
     web8081: 8081
     web8000: 8000
 
-XnatMq:
+xnatMq:
   name: xnat-mq
   image: webcenter/activemq:5.14.3
   ports:
     adminUi: 8161
     mq: 61616
-  Env:
-    ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT: "true"
-    ACTIVEMQ_ADMIN_LOGIN: admin
-    ACTIVEMQ_ADMIN_PASSWORD: password
-    ACTIVEMQ_WRITE_LOGIN: write
-    ACTIVEMQ_WRITE_PASSWORD: password
-    ACTIVEMQ_READ_LOGIN: read
-    ACTIVEMQ_READ_PASSWORD: password
-    ACTIVEMQ_JMX_LOGIN: jmx
-    ACTIVEMQ_JMX_PASSWORD: password
-    ACTIVEMQ_ENABLED_SCHEDULER: "true"
-    ACTIVEMQ_MIN_MEMORY: 1024
-    ACTIVEMQ_MAX_MEMORY: 4096
+  env:
+    config:
+      removeDefaultAccount: true
+      enabledScheduler: true
+      minMemory: 1024
+      maxMemory: 4096
+    users:
+      admin:
+        login: admin
+        password: password
+      write:
+        login: write
+        password: password
+      read:
+        login: read
+        password: password
+      jmx:
+        login: jmx
+        password: password
   volumes:
     data: /data
   storage: 1Gi
-  Request: 500Mi
+  request: 500Mi
   hostPath: /home/nvidia/xnat-docker-compose/mq-data
 
 ingress:

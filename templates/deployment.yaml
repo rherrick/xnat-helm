@@ -1,223 +1,223 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.XnatWeb.name }}
+  name: {{ .Values.xnatWeb.name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ .Values.XnatWeb.name }}
+      app.kubernetes.io/name: {{ .Values.xnatWeb.name }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ .Values.XnatWeb.name }}
+        app.kubernetes.io/name: {{ .Values.xnatWeb.name }}
     spec:
       containers:
       - env:
         - name: XNAT_VER
-          value: {{ .Values.XnatWeb.Env.XNAT_VER }}
+          value: {{ .Values.xnatWeb.env.version }}
         - name: CATALINA_OPTS
-          value: {{ .Values.XnatWeb.Env.CatalinaOpts }}
+          value: {{ .Values.xnatWeb.env.catalinaOpts }}
         - name: XNAT_HOME
-          value: {{ .Values.XnatWeb.Env.XNAT_HOME }}
+          value: {{ .Values.xnatWeb.env.folders.home }}
         - name: XNAT_ROOT
-          value: {{ .Values.XnatWeb.Env.XNAT_ROOT }}
+          value: {{ .Values.xnatWeb.env.folders.root }}
         - name: XNAT_DATASOURCE_DRIVER
-          value: {{ .Values.XnatWeb.Env.XNAT_DATASOURCE_DRIVER }}
+          value: {{ .Values.xnatWeb.env.dataSource.driver }}
         - name: XNAT_DATASOURCE_URL
-          value: {{ .Values.XnatWeb.Env.XNAT_DATASOURCE_URL }}
+          value: {{ .Values.xnatWeb.env.dataSource.url }}
         - name: XNAT_DATASOURCE_USERNAME
-          value: {{ .Values.XnatWeb.Env.XNAT_DATASOURCE_USERNAME }}
+          value: {{ .Values.xnatWeb.env.dataSource.username }}
         - name: XNAT_DATASOURCE_PASSWORD
-          value: {{ .Values.XnatWeb.Env.XNAT_DATASOURCE_PASSWORD }}
+          value: {{ .Values.xnatWeb.env.dataSource.password }}
         - name: XNAT_HIBERNATE_DIALECT
-          value: {{ .Values.XnatWeb.Env.XNAT_HIBERNATE_DIALECT }}
+          value: {{ .Values.xnatWeb.env.dataSource.dialect }}
         - name: TOMCAT_XNAT_FOLDER
-          value: {{ .Values.XnatWeb.Env.TOMCAT_XNAT_FOLDER }}
+          value: {{ .Values.xnatWeb.env.folders.tomcat }}
         - name: ACTIVEMQ_BROKER_URL
-          value: {{ .Values.XnatWeb.Env.ACTIVEMQ_BROKER_URL }}
+          value: {{ .Values.xnatWeb.env.mq.brokerUrl }}
         - name: ACTIVEMQ_USER
-          value: {{ .Values.XnatWeb.Env.ACTIVEMQ_USER }}
+          value: {{ .Values.xnatWeb.env.mq.username }}
         - name: ACTIVEMQ_PASSWORD
-          value: {{ .Values.XnatWeb.Env.ACTIVEMQ_PASSWORD }}
+          value: {{ .Values.xnatWeb.env.mq.password }}
         - name: MAX_FILE_SIZE
-          value: "{{ .Values.XnatWeb.Env.MAX_FILE_SIZE }}"
+          value: "{{ .Values.xnatWeb.env.multipart.maxFileSize }}"
         - name: MAX_REQUEST_SIZE
-          value: "{{ .Values.XnatWeb.Env.MAX_REQUEST_SIZE }}"
-        image: {{ .Values.XnatWeb.image }}
+          value: "{{ .Values.xnatWeb.env.multipart.maxRequestSize }}"
+        image: {{ .Values.xnatWeb.image }}
         command: ["/bin/bash", "-c"]
-        args: [{{ .Values.XnatWeb.args }}]
+        args: [{{ .Values.xnatWeb.args }}]
         imagePullPolicy: Always
-        name: {{ .Values.XnatWeb.name }}
+        name: {{ .Values.xnatWeb.name }}
         ports:
-        - containerPort: {{ .Values.XnatWeb.ports.web8080 }}
+        - containerPort: {{ .Values.xnatWeb.ports.web8080 }}
           protocol: TCP
-        - containerPort: {{ .Values.XnatWeb.ports.web8000 }}
+        - containerPort: {{ .Values.xnatWeb.ports.web8000 }}
           protocol: TCP
-        - containerPort: {{.Values.XnatWeb.ports.ssh22 }}
+        - containerPort: {{.Values.xnatWeb.ports.ssh22 }}
           protocol: TCP
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
-        - mountPath: {{ .Values.XnatWeb.plugins.volumes }}
-          name: {{ .Values.XnatWeb.name }}-claim0
-        - mountPath: {{ .Values.XnatWeb.logs.volumes }}
-          name: {{ .Values.XnatWeb.name }}-claim1
-        - mountPath: {{ .Values.XnatWeb.archive.volumes }}
-          name: {{ .Values.XnatWeb.name }}-claim2
-        - mountPath: {{ .Values.XnatWeb.build.volumes }}
-          name: {{ .Values.XnatWeb.name }}-claim3
-        - mountPath: {{ .Values.XnatWeb.dockerSock.volumes }}
-          name: {{ .Values.XnatWeb.name }}-claim4
-        - mountPath: {{ .Values.XnatWeb.config.volumes }}/{{ .Values.XnatWeb.config.xnat_config }}
-          subPath: {{ .Values.XnatWeb.config.xnat_config }}
-          name: {{ .Values.XnatWeb.config.xnat_config_name }}
-        - mountPath: {{ .Values.XnatWeb.config.volumes }}/{{ .Values.XnatWeb.config.postgres }}
-          subPath: {{ .Values.XnatWeb.config.postgres }}
-          name: {{ .Values.XnatWeb.config.postgres_name }}
+        - mountPath: {{ .Values.xnatWeb.plugins.volumes }}
+          name: {{ .Values.xnatWeb.name }}-claim0
+        - mountPath: {{ .Values.xnatWeb.logs.volumes }}
+          name: {{ .Values.xnatWeb.name }}-claim1
+        - mountPath: {{ .Values.xnatWeb.archive.volumes }}
+          name: {{ .Values.xnatWeb.name }}-claim2
+        - mountPath: {{ .Values.xnatWeb.build.volumes }}
+          name: {{ .Values.xnatWeb.name }}-claim3
+        - mountPath: {{ .Values.xnatWeb.dockerSock.volumes }}
+          name: {{ .Values.xnatWeb.name }}-claim4
+        - mountPath: {{ .Values.xnatWeb.config.bin }}/{{ .Values.xnatWeb.config.xnat.script }}
+          subPath: {{ .Values.xnatWeb.config.xnat.script }}
+          name: {{ .Values.xnatWeb.config.xnat.name }}
+        - mountPath: {{ .Values.xnatWeb.config.bin }}/{{ .Values.xnatWeb.config.postgres.script }}
+          subPath: {{ .Values.xnatWeb.config.postgres.script }}
+          name: {{ .Values.xnatWeb.config.postgres.name }}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
-      - name: {{ .Values.XnatWeb.config.xnat_config_name }}
+      - name: {{ .Values.xnatWeb.config.xnat.name }}
         configMap:
-          name: {{ .Values.XnatWeb.config.xnat_config_name }}
+          name: {{ .Values.xnatWeb.config.xnat.name }}
           defaultMode: 0777
-      - name: {{ .Values.XnatWeb.config.postgres_name }}
+      - name: {{ .Values.xnatWeb.config.postgres.name }}
         configMap: 
-          name: {{ .Values.XnatWeb.config.postgres_name }}
+          name: {{ .Values.xnatWeb.config.postgres.name }}
           defaultMode: 0777
-      - name: {{ .Values.XnatWeb.name }}-claim0
+      - name: {{ .Values.xnatWeb.name }}-claim0
         persistentVolumeClaim:
-          claimName: {{ .Values.XnatWeb.name }}-claim0
-      - name: {{ .Values.XnatWeb.name }}-claim1
+          claimName: {{ .Values.xnatWeb.name }}-claim0
+      - name: {{ .Values.xnatWeb.name }}-claim1
         persistentVolumeClaim:
-          claimName: {{ .Values.XnatWeb.name }}-claim1
-      - name: {{ .Values.XnatWeb.name }}-claim2
+          claimName: {{ .Values.xnatWeb.name }}-claim1
+      - name: {{ .Values.xnatWeb.name }}-claim2
         persistentVolumeClaim:
-          claimName: {{ .Values.XnatWeb.name }}-claim2
-      - name: {{ .Values.XnatWeb.name }}-claim3
+          claimName: {{ .Values.xnatWeb.name }}-claim2
+      - name: {{ .Values.xnatWeb.name }}-claim3
         persistentVolumeClaim:
-          claimName: {{ .Values.XnatWeb.name }}-claim3
-      - name: {{ .Values.XnatWeb.name }}-claim4
+          claimName: {{ .Values.xnatWeb.name }}-claim3
+      - name: {{ .Values.xnatWeb.name }}-claim4
         persistentVolumeClaim:
-          claimName: {{ .Values.XnatWeb.name }}-claim4
+          claimName: {{ .Values.xnatWeb.name }}-claim4
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.XnatDb.name }}
+  name: {{ .Values.xnatDb.name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ .Values.XnatDb.name }}
+      app.kubernetes.io/name: {{ .Values.xnatDb.name }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ .Values.XnatDb.name }}
+        app.kubernetes.io/name: {{ .Values.xnatDb.name }}
     spec:
       containers:
       - env:
         - name: POSTGRES_HOST_AUTH_METHOD
-          value: {{ .Values.XnatDb.auth_method }}
-        image: {{ .Values.XnatDb.image }}
+          value: {{ .Values.xnatDb.authMethod }}
+        image: {{ .Values.xnatDb.image }}
         imagePullPolicy: Always
-        name: {{ .Values.XnatDb.name }}
+        name: {{ .Values.xnatDb.name }}
         ports:
-        - containerPort: {{ .Values.XnatDb.ports }}
+        - containerPort: {{ .Values.xnatDb.ports }}
           protocol: TCP
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
-        - mountPath: {{ .Values.XnatDb.volumes.data }}
-          name: {{ .Values.XnatDb.name }}-claim0
-        - mountPath: {{ .Values.XnatDb.volumes.sqlinit }}/{{ .Values.XnatDb.volumes.name }}
-          subPath: {{ .Values.XnatDb.volumes.name }}
-          name: {{ .Values.XnatDb.name }}
+        - mountPath: {{ .Values.xnatDb.volumes.data }}
+          name: {{ .Values.xnatDb.name }}-claim0
+        - mountPath: {{ .Values.xnatDb.init.path }}/{{ .Values.xnatDb.init.script }}
+          subPath: {{ .Values.xnatDb.init.script }}
+          name: {{ .Values.xnatDb.name }}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
-      - name: {{ .Values.XnatDb.name }}
+      - name: {{ .Values.xnatDb.name }}
         configMap:
-          name: {{ .Values.XnatDb.name }}
-      - name: {{ .Values.XnatDb.name }}-claim0
+          name: {{ .Values.xnatDb.name }}
+      - name: {{ .Values.xnatDb.name }}-claim0
         persistentVolumeClaim:
-          claimName: {{ .Values.XnatDb.name }}-claim0
+          claimName: {{ .Values.xnatDb.name }}-claim0
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.XnatMq.name }}
+  name: {{ .Values.xnatMq.name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ .Values.XnatMq.name }}
+      app.kubernetes.io/name: {{ .Values.xnatMq.name }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ .Values.XnatMq.name }}
+        app.kubernetes.io/name: {{ .Values.xnatMq.name }}
     spec:
       containers:
       - env:
         - name: ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT
-          value: {{ .Values.XnatMq.ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT }}
-        - name: ACTIVEMQ_ADMIN_LOGIN
-          value: {{ .Values.XnatMq.ACTIVEMQ_ADMIN_LOGIN }}
-        - name: ACTIVEMQ_ADMIN_PASSWORD
-          value: {{ .Values.XnatMq.ACTIVEMQ_ADMIN_PASSWORD }}
-        - name: ACTIVEMQ_WRITE_LOGIN
-          value: {{ .Values.XnatMq.ACTIVEMQ_WRITE_LOGIN }}
-        - name: ACTIVEMQ_WRITE_PASSWORD
-          value: {{ .Values.XnatMq.ACTIVEMQ_WRITE_PASSWORD }}
-        - name: ACTIVEMQ_READ_LOGIN
-          value: {{ .Values.XnatMq.ACTIVEMQ_READ_LOGIN }}
-        - name: ACTIVEMQ_READ_PASSWORD
-          value: {{ .Values.XnatMq.ACTIVEMQ_READ_PASSWORD }}
-        - name: ACTIVEMQ_JMX_LOGIN
-          value: {{ .Values.XnatMq.ACTIVEMQ_JMX_LOGIN }}
-        - name: ACTIVEMQ_JMX_PASSWORD
-          value: {{ .Values.XnatMq.ACTIVEMQ_JMX_PASSWORD }}
+          value: "{{ .Values.xnatMq.env.config.removeDefaultAccount }}"
         - name: ACTIVEMQ_ENABLED_SCHEDULER
-          value: {{ .Values.XnatMq.ACTIVEMQ_ENABLED_SCHEDULER }}
+          value: "{{ .Values.xnatMq.env.config.enabledScheduler }}"
         - name: ACTIVEMQ_MIN_MEMORY
-          value: {{ .Values.XnatMq.ACTIVEMQ_MIN_MEMORY }}
+          value: "{{ .Values.xnatMq.env.config.minMemory }}"
         - name: ACTIVEMQ_MAX_MEMORY
-          value: {{ .Values.XnatMq.ACTIVEMQ_MAX_MEMORY }}
-        image: {{ .Values.XnatMq.image }}
+          value: "{{ .Values.xnatMq.env.config.maxMemory }}"
+        - name: ACTIVEMQ_ADMIN_LOGIN
+          value: {{ .Values.xnatMq.env.users.admin.login }}
+        - name: ACTIVEMQ_ADMIN_PASSWORD
+          value: {{ .Values.xnatMq.env.users.admin.password }}
+        - name: ACTIVEMQ_WRITE_LOGIN
+          value: {{ .Values.xnatMq.env.users.write.login }}
+        - name: ACTIVEMQ_WRITE_PASSWORD
+          value: {{ .Values.xnatMq.env.users.write.password }}
+        - name: ACTIVEMQ_READ_LOGIN
+          value: {{ .Values.xnatMq.env.users.read.login }}
+        - name: ACTIVEMQ_READ_PASSWORD
+          value: {{ .Values.xnatMq.env.users.read.password }}
+        - name: ACTIVEMQ_JMX_LOGIN
+          value: {{ .Values.xnatMq.env.users.jmx.login }}
+        - name: ACTIVEMQ_JMX_PASSWORD
+          value: {{ .Values.xnatMq.env.users.jmx.password }}
+        image: {{ .Values.xnatMq.image }}
         imagePullPolicy: Always
-        name: {{ .Values.XnatMq.name }}
+        name: {{ .Values.xnatMq.name }}
         ports:
-        - containerPort: {{ .Values.XnatMq.ports.adminUi }}
+        - containerPort: {{ .Values.xnatMq.ports.adminUi }}
           protocol: TCP
-        - containerPort: {{ .Values.XnatMq.ports.mq }}
+        - containerPort: {{ .Values.xnatMq.ports.mq }}
           protocol: TCP
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
-        - mountPath: {{ .Values.XnatMq.volumes.data }}
-          name: {{ .Values.XnatMq.name }}-claim0
+        - mountPath: {{ .Values.xnatMq.volumes.data }}
+          name: {{ .Values.xnatMq.name }}-claim0
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
-      - name: {{ .Values.XnatMq.name }}-claim0
+      - name: {{ .Values.xnatMq.name }}-claim0
         persistentVolumeClaim:
-          claimName: {{ .Values.XnatMq.name }}-claim0
+          claimName: {{ .Values.xnatMq.name }}-claim0

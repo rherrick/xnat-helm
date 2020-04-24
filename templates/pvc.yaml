@@ -3,17 +3,17 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: {{ .Values.XnatWeb.name }}-claim0
-  name: {{ .Values.XnatWeb.name }}-claim0
+    io.kompose.service: {{ .Values.xnatWeb.name }}-claim0
+  name: {{ .Values.xnatWeb.name }}-claim0
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.XnatWeb.plugins.Request }}
+      storage: {{ .Values.xnatWeb.plugins.request }}
   selector:
     matchLabels:
-      name: {{ .Values.XnatWeb.name }}-volume0
+      name: {{ .Values.xnatWeb.name }}-volume0
 status: {}
 ---
 apiVersion: v1
@@ -21,17 +21,17 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: {{ .Values.XnatWeb.name }}-claim1
-  name: {{ .Values.XnatWeb.name }}-claim1
+    io.kompose.service: {{ .Values.xnatWeb.name }}-claim1
+  name: {{ .Values.xnatWeb.name }}-claim1
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.XnatWeb.logs.Request }}
+      storage: {{ .Values.xnatWeb.logs.request }}
   selector:
     matchLabels:
-      name: {{ .Values.XnatWeb.name }}-volume1
+      name: {{ .Values.xnatWeb.name }}-volume1
 status: {}
 ---
 apiVersion: v1
@@ -39,17 +39,17 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: {{ .Values.XnatWeb.name }}-claim2
-  name: {{ .Values.XnatWeb.name }}-claim2
+    io.kompose.service: {{ .Values.xnatWeb.name }}-claim2
+  name: {{ .Values.xnatWeb.name }}-claim2
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.XnatWeb.archive.Request }}
+      storage: {{ .Values.xnatWeb.archive.request }}
   selector:
     matchLabels:
-      name: {{ .Values.XnatWeb.name }}-volume2
+      name: {{ .Values.xnatWeb.name }}-volume2
 status: {}
 ---
 apiVersion: v1
@@ -57,17 +57,17 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: {{ .Values.XnatWeb.name }}-claim3
-  name: {{ .Values.XnatWeb.name }}-claim3
+    io.kompose.service: {{ .Values.xnatWeb.name }}-claim3
+  name: {{ .Values.xnatWeb.name }}-claim3
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.XnatWeb.build.Request }}
+      storage: {{ .Values.xnatWeb.build.request }}
   selector:
     matchLabels:
-      name: {{ .Values.XnatWeb.name }}-volume3
+      name: {{ .Values.xnatWeb.name }}-volume3
 status: {}
 ---
 apiVersion: v1
@@ -75,17 +75,17 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: {{ .Values.XnatWeb.name }}-claim4
-  name: {{ .Values.XnatWeb.name }}-claim4
+    io.kompose.service: {{ .Values.xnatWeb.name }}-claim4
+  name: {{ .Values.xnatWeb.name }}-claim4
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.XnatWeb.dockerSock.Request }}
+      storage: {{ .Values.xnatWeb.dockerSock.request }}
   selector:
     matchLabels:
-      name: {{ .Values.XnatWeb.name }}-volume4
+      name: {{ .Values.xnatWeb.name }}-volume4
 status: {}
 ---
 apiVersion: v1
@@ -93,31 +93,31 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: {{ .Values.XnatDb.name }}-claim0
-  name: {{ .Values.XnatDb.name }}-claim0
+    io.kompose.service: {{ .Values.xnatDb.name }}-claim0
+  name: {{ .Values.xnatDb.name }}-claim0
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.XnatDb.Request }}
+      storage: {{ .Values.xnatDb.request }}
   selector:
     matchLabels:
-      name: {{ .Values.XnatDb.name }}-volume
+      name: {{ .Values.xnatDb.name }}-volume
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: {{ .Values.XnatMq.name }}-claim0
-  name: {{ .Values.XnatMq.name }}-claim0
+    io.kompose.service: {{ .Values.xnatMq.name }}-claim0
+  name: {{ .Values.xnatMq.name }}-claim0
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.XnatMq.Request }}
+      storage: {{ .Values.xnatMq.request }}
   selector:
     matchLabels:
-      name: {{ .Values.XnatMq.name }}-volume
+      name: {{ .Values.xnatMq.name }}-volume
