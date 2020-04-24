@@ -104,3 +104,20 @@ spec:
   selector:
     matchLabels:
       name: {{ .Values.XnatDb.name }}-volume
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: {{ .Values.XnatMq.name }}-claim0
+  name: {{ .Values.XnatMq.name }}-claim0
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.XnatMq.Request }}
+  selector:
+    matchLabels:
+      name: {{ .Values.XnatMq.name }}-volume

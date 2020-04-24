@@ -24,6 +24,11 @@ XnatWeb:
     XNAT_DATASOURCE_PASSWORD: xnat
     XNAT_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQL9Dialect
     TOMCAT_XNAT_FOLDER: ROOT
+    ACTIVEMQ_BROKER_URL: tcp://xnat-mq:61616
+    ACTIVEMQ_USER: write
+    ACTIVEMQ_PASSWORD: password
+    MAX_FILE_SIZE: 1073741824
+    MAX_REQUEST_SIZE: 2147483648
   image: tomcat:7-jre8-alpine
   args: "make-xnat-config.sh && wait-for-postgres.sh /usr/local/tomcat/bin/catalina.sh run"
   config:
@@ -66,7 +71,32 @@ XnatWeb:
     web8080: 8080
     web8081: 8081
     web8000: 8000
- 
+
+XnatMq:
+  name: xnat-mq
+  image: webcenter/activemq:5.14.3
+  ports:
+    adminUi: 8161
+    mq: 61616
+  Env:
+    ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT: "true"
+    ACTIVEMQ_ADMIN_LOGIN: admin
+    ACTIVEMQ_ADMIN_PASSWORD: password
+    ACTIVEMQ_WRITE_LOGIN: write
+    ACTIVEMQ_WRITE_PASSWORD: password
+    ACTIVEMQ_READ_LOGIN: read
+    ACTIVEMQ_READ_PASSWORD: password
+    ACTIVEMQ_JMX_LOGIN: jmx
+    ACTIVEMQ_JMX_PASSWORD: password
+    ACTIVEMQ_ENABLED_SCHEDULER: "true"
+    ACTIVEMQ_MIN_MEMORY: 1024
+    ACTIVEMQ_MAX_MEMORY: 4096
+  volumes:
+    data: /data
+  storage: 1Gi
+  Request: 500Mi
+  hostPath: /home/nvidia/xnat-docker-compose/mq-data
+
 ingress:
   enabled: false
   annotations: {}

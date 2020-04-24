@@ -36,6 +36,16 @@ spec:
           value: {{ .Values.XnatWeb.Env.XNAT_HIBERNATE_DIALECT }}
         - name: TOMCAT_XNAT_FOLDER
           value: {{ .Values.XnatWeb.Env.TOMCAT_XNAT_FOLDER }}
+        - name: ACTIVEMQ_BROKER_URL
+          value: {{ .Values.XnatWeb.Env.ACTIVEMQ_BROKER_URL }}
+        - name: ACTIVEMQ_USER
+          value: {{ .Values.XnatWeb.Env.ACTIVEMQ_USER }}
+        - name: ACTIVEMQ_PASSWORD
+          value: {{ .Values.XnatWeb.Env.ACTIVEMQ_PASSWORD }}
+        - name: MAX_FILE_SIZE
+          value: "{{ .Values.XnatWeb.Env.MAX_FILE_SIZE }}"
+        - name: MAX_REQUEST_SIZE
+          value: "{{ .Values.XnatWeb.Env.MAX_REQUEST_SIZE }}"
         image: {{ .Values.XnatWeb.image }}
         command: ["/bin/bash", "-c"]
         args: [{{ .Values.XnatWeb.args }}]
@@ -145,3 +155,69 @@ spec:
       - name: {{ .Values.XnatDb.name }}-claim0
         persistentVolumeClaim:
           claimName: {{ .Values.XnatDb.name }}-claim0
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.XnatMq.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.XnatMq.name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.XnatMq.name }}
+    spec:
+      containers:
+      - env:
+        - name: ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT
+          value: {{ .Values.XnatMq.ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT }}
+        - name: ACTIVEMQ_ADMIN_LOGIN
+          value: {{ .Values.XnatMq.ACTIVEMQ_ADMIN_LOGIN }}
+        - name: ACTIVEMQ_ADMIN_PASSWORD
+          value: {{ .Values.XnatMq.ACTIVEMQ_ADMIN_PASSWORD }}
+        - name: ACTIVEMQ_WRITE_LOGIN
+          value: {{ .Values.XnatMq.ACTIVEMQ_WRITE_LOGIN }}
+        - name: ACTIVEMQ_WRITE_PASSWORD
+          value: {{ .Values.XnatMq.ACTIVEMQ_WRITE_PASSWORD }}
+        - name: ACTIVEMQ_READ_LOGIN
+          value: {{ .Values.XnatMq.ACTIVEMQ_READ_LOGIN }}
+        - name: ACTIVEMQ_READ_PASSWORD
+          value: {{ .Values.XnatMq.ACTIVEMQ_READ_PASSWORD }}
+        - name: ACTIVEMQ_JMX_LOGIN
+          value: {{ .Values.XnatMq.ACTIVEMQ_JMX_LOGIN }}
+        - name: ACTIVEMQ_JMX_PASSWORD
+          value: {{ .Values.XnatMq.ACTIVEMQ_JMX_PASSWORD }}
+        - name: ACTIVEMQ_ENABLED_SCHEDULER
+          value: {{ .Values.XnatMq.ACTIVEMQ_ENABLED_SCHEDULER }}
+        - name: ACTIVEMQ_MIN_MEMORY
+          value: {{ .Values.XnatMq.ACTIVEMQ_MIN_MEMORY }}
+        - name: ACTIVEMQ_MAX_MEMORY
+          value: {{ .Values.XnatMq.ACTIVEMQ_MAX_MEMORY }}
+        image: {{ .Values.XnatMq.image }}
+        imagePullPolicy: Always
+        name: {{ .Values.XnatMq.name }}
+        ports:
+        - containerPort: {{ .Values.XnatMq.ports.adminUi }}
+          protocol: TCP
+        - containerPort: {{ .Values.XnatMq.ports.mq }}
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: {{ .Values.XnatMq.volumes.data }}
+          name: {{ .Values.XnatMq.name }}-claim0
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: {{ .Values.XnatMq.name }}-claim0
+        persistentVolumeClaim:
+          claimName: {{ .Values.XnatMq.name }}-claim0

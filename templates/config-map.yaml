@@ -20,17 +20,22 @@ data:
       ${XNAT_ROOT}/prearchive
 
     # generate xnat config
-    if [ ! -f $XNAT_HOME/config/xnat-conf.properties ]; then
-      cat > $XNAT_HOME/config/xnat-conf.properties << EOF
-    datasource.driver=$XNAT_DATASOURCE_DRIVER
-    datasource.url=$XNAT_DATASOURCE_URL
-    datasource.username=$XNAT_DATASOURCE_USERNAME
-    datasource.password=$XNAT_DATASOURCE_PASSWORD
-    hibernate.dialect=$XNAT_HIBERNATE_DIALECT
+    if [ ! -f ${XNAT_HOME}/config/xnat-conf.properties ]; then
+      cat > ${XNAT_HOME}/config/xnat-conf.properties << EOF
+    datasource.driver=${XNAT_DATASOURCE_DRIVER}
+    datasource.url=${XNAT_DATASOURCE_URL}
+    datasource.username=${XNAT_DATASOURCE_USERNAME}
+    datasource.password=${XNAT_DATASOURCE_PASSWORD}
+    hibernate.dialect=${XNAT_HIBERNATE_DIALECT}
     hibernate.hbm2ddl.auto=update
     hibernate.show_sql=false
     hibernate.cache.use_second_level_cache=true
     hibernate.cache.use_query_cache=true
+    spring.activemq.broker-url=${ACTIVEMQ_BROKER_URL}
+    spring.activemq.user=${ACTIVEMQ_USER}
+    spring.activemq.password=${ACTIVEMQ_PASSWORD}
+    spring.http.multipart.max-file-size=${MAX_FILE_SIZE}
+    spring.http.multipart.max-request-size=${MAX_REQUEST_SIZE}
     EOF
     fi
 
@@ -54,7 +59,7 @@ data:
 
     cmd="$@"
 
-    until psql -U "$XNAT_DATASOURCE_USERNAME" -h {{ .Values.XnatDb.name }} -c '\q'; do
+    until psql -U "${XNAT_DATASOURCE_USERNAME}" -h {{ .Values.XnatDb.name }} -c '\q'; do
       >&2 echo "Postgres is unavailable - sleeping"
       sleep 5
     done

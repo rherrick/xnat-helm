@@ -33,3 +33,20 @@ spec:
     targetPort: {{ .Values.XnatDb.ports }}
   selector:
     app.kubernetes.io/name: {{ .Values.XnatDb.name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ .Values.XnatMq.name }}
+  name: {{ .Values.XnatMq.name }}
+spec:
+  ports:
+  - name: {{ .Values.XnatMq.name }}-admin
+    port: {{ .Values.XnatMq.ports.adminUi }}
+    targetPort: {{ .Values.XnatMq.ports.adminUi }}
+  - name: {{ .Values.XnatMq.name }}
+    port: {{ .Values.XnatMq.ports.mq }}
+    targetPort: {{ .Values.XnatMq.ports.mq }}
+  selector:
+    app.kubernetes.io/name: {{ .Values.XnatMq.name }}

@@ -87,3 +87,18 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: {{ .Values.XnatDb.hostPath }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.XnatMq.name }}-volume
+  labels:
+    name: {{ .Values.XnatMq.name }}-volume
+    type: local
+spec:
+  capacity:
+    storage: {{ .Values.XnatMq.storage }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.XnatMq.hostPath }}
