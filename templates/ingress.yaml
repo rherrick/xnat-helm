@@ -1,0 +1,29 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1beta1
+metadata:
+  name: traefik-ingress
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+
+spec:
+  rules:
+    - host: example.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ .Values.xnatWeb.name }}
+              servicePort: {{ .Values.xnatWeb.ports.web8080 }}
+          - path: /whoami/1
+            backend:
+              serviceName: whoami1
+              servicePort: 80
+          - path: /whoami/2
+            backend:
+              serviceName: whoami2
+              servicePort: 80
+          - path: /whoami/3
+            backend:
+              serviceName: whoami3
+              servicePort: 80
+
