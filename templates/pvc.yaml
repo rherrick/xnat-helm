@@ -121,3 +121,20 @@ spec:
   selector:
     matchLabels:
       name: {{ .Values.xnatMq.name }}-volume
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: xnat-pacs-claim0
+  name: xnat-pacs-claim0
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      name: xnat-pacs-volume

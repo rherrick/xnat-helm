@@ -77,9 +77,9 @@ spec:
         - name: ACTIVEMQ_PASSWORD
           value: {{ .Values.xnatWeb.env.mq.password }}
         - name: MAX_FILE_SIZE
-          value: "{{ .Values.xnatWeb.env.multipart.maxFileSize }}"
+          value: "{{ .Values.xnatWeb.env.multipart.maxFileSize | int }}"
         - name: MAX_REQUEST_SIZE
-          value: "{{ .Values.xnatWeb.env.multipart.maxRequestSize }}"
+          value: "{{ .Values.xnatWeb.env.multipart.maxRequestSize | int }}"
         image: {{ .Values.xnatWeb.image }}
         command: ["/bin/bash", "-c"]
         args: [{{ .Values.xnatWeb.args }}]
@@ -141,6 +141,7 @@ spec:
       - name: {{ .Values.xnatWeb.name }}-claim4
         persistentVolumeClaim:
           claimName: {{ .Values.xnatWeb.name }}-claim4
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -189,6 +190,53 @@ spec:
       - name: {{ .Values.xnatDb.name }}-claim0
         persistentVolumeClaim:
           claimName: {{ .Values.xnatDb.name }}-claim0
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.xnatDbAdmin.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.xnatDbAdmin.name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.xnatDbAdmin.name }}
+    spec:
+      containers:
+      - env:
+        - name: PGADMIN_DEFAULT_EMAIL
+          value: {{ .Values.xnatDbAdmin.login.email }}
+        - name: PGADMIN_DEFAULT_PASSWORD
+          value: {{ .Values.xnatDbAdmin.login.password }}
+        image: {{ .Values.xnatDbAdmin.image }}
+        imagePullPolicy: Always
+        name: {{ .Values.xnatDbAdmin.name }}
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: {{ .Values.xnatDbAdmin.config.path }}/{{ .Values.xnatDbAdmin.config.servers }}
+          subPath: {{ .Values.xnatDbAdmin.config.servers }}
+          name: {{ .Values.xnatDbAdmin.name }}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: {{ .Values.xnatDbAdmin.name }}
+        configMap:
+          name: {{ .Values.xnatDbAdmin.name }}
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -213,9 +261,9 @@ spec:
         - name: ACTIVEMQ_ENABLED_SCHEDULER
           value: "{{ .Values.xnatMq.env.config.enabledScheduler }}"
         - name: ACTIVEMQ_MIN_MEMORY
-          value: "{{ .Values.xnatMq.env.config.minMemory }}"
+          value: "{{ .Values.xnatMq.env.config.minMemory | int }}"
         - name: ACTIVEMQ_MAX_MEMORY
-          value: "{{ .Values.xnatMq.env.config.maxMemory }}"
+          value: "{{ .Values.xnatMq.env.config.maxMemory | int }}"
         - name: ACTIVEMQ_ADMIN_LOGIN
           value: {{ .Values.xnatMq.env.users.admin.login }}
         - name: ACTIVEMQ_ADMIN_PASSWORD
@@ -255,6 +303,67 @@ spec:
       - name: {{ .Values.xnatMq.name }}-claim0
         persistentVolumeClaim:
           claimName: {{ .Values.xnatMq.name }}-claim0
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xnat-pacs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: xnat-pacs
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: xnat-pacs
+    spec:
+      containers:
+      - env:
+        - name: DICOM_WEB_PLUGIN_ENABLED
+          value: "true"
+        - name: ORTHANC_WEB_VIEWER_PLUGIN_ENABLED
+          value: "true"
+        - name: ORTHANC__POSTGRESQL__HOST
+          value: "xnat-db"
+        - name: ORTHANC__POSTGRESQL__USERNAME
+          value: "orthanc"
+        - name: ORTHANC__POSTGRESQL__PASSWORD
+          value: "orthanc"
+        - name: ORTHANC__NAME
+          value: "XNAT Orthanc"
+        - name: ORTHANC__DICOM_AET
+          value: "ORTHANC"
+        - name: ORTHANC__DICOM_MODALITIES
+          value: '{ "XDQR" : [ "XDQR", "xnatdev.xnat.org", 8104 ], "XNAT" : [ "XNAT", "xnatdev.xnat.org", 8144 ] }'
+        - name: ORTHANC__REGISTERED_USERS
+          value: '{"admin": "admin"}'
+        image: osimis/orthanc
+        imagePullPolicy: Always
+        name: xnat-pacs
+        ports:
+        - containerPort: 4242
+          protocol: TCP
+        - containerPort: 8042
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/lib/orthanc/db
+          name: xnat-pacs-claim0
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: xnat-pacs-claim0
+        persistentVolumeClaim:
+          claimName: xnat-pacs-claim0
 
 ---
 kind: Deployment

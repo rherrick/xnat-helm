@@ -12,10 +12,24 @@ xnatDb:
   volumes:
     data: /var/lib/postgresql/data
 
+xnatDbAdmin:
+  name: xnat-db-admin
+  image: dpage/pgadmin4:latest
+  storage: 4Gi
+  request: 2Gi
+  hostPath: /home/nvidia/postgres
+  port: 80
+  config:
+    path: /pgadmin4
+    servers: servers.json
+  login:
+    email: info@xnat.org
+    password: postgres
+
 xnatWeb:
   name: xnat-web
   env:
-    version: '1.7.6'
+    version: '1.7.7-INTERNAL'
     catalinaOpts: -Xms128m -Xmx2048m -Dxnat.home=/data/xnat/home -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
     folders:
       home: /data/xnat/home
@@ -40,7 +54,7 @@ xnatWeb:
     bin: /usr/local/bin
     warFile:
       name: xnat-web-${XNAT_VER}.war
-      downloadUrl: https://api.bitbucket.org/2.0/repositories/xnatdev/xnat-web/downloads
+      downloadUrl: https://ci.xnat.org/job/XNAT%20Web/1745/artifact/build/libs
     xnat:
       name: xnat-config
       script: make-xnat-config.sh

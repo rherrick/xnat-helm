@@ -102,3 +102,18 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: {{ .Values.xnatMq.hostPath }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: xnat-pacs-volume
+  labels:
+    name: xnat-pacs-volume
+    type: local
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /home/nvidia/xnat-docker-compose/pacs-data

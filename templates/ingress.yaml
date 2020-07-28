@@ -7,13 +7,21 @@ metadata:
 
 spec:
   rules:
-    - host: example.com
+    - host: kube.wurstworks.com
       http:
         paths:
           - path: /
             backend:
               serviceName: {{ .Values.xnatWeb.name }}
               servicePort: {{ .Values.xnatWeb.ports.web8080 }}
+          - path: /db-admin
+            backend:
+              serviceName: xnat-db-admin
+              servicePort: 80
+          - path: /pacs
+            backend:
+              serviceName: xnat-pacs
+              servicePort: 8042
           - path: /whoami/1
             backend:
               serviceName: whoami1
